@@ -1,0 +1,75 @@
+/* login-styles.css */
+.hero-login {
+    position: relative;
+    min-height: 100vh;
+    background: url('/media/img/ags-landing-backgorund.jpeg') no-repeat center center;
+    background-size: contain;
+  }
+  .hero-login::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 1;
+  }
+  .login-card {
+    position: relative;
+    z-index: 2;
+    max-width: 400px;
+    width: 100%;
+    background: rgba(0,0,0,0.75);
+    border-radius: .5rem;
+    color: var(--accent-light);
+    font-family: var(--font-body);
+  }
+  .login-card h2 {
+    font-family: var(--font-heading);
+    margin-bottom: 1.5rem;
+    color: var(--accent-light);
+  }
+  .nav-pills .nav-link {
+    font-weight: 600;
+    color: var(--accent-light);
+    background: rgba(255,255,255,0.1);
+    border-radius: .25rem;
+  }
+  .nav-pills .nav-link.active {
+    background: var(--btn-bg);
+    color: var(--btn-color);
+  }
+  .form-control {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: var(--accent-light);
+  }
+  .form-control::placeholder {
+    color: rgba(255,255,255,0.6);
+  }
+  .form-control:focus {
+    background: rgba(255,255,255,0.2);
+    box-shadow: none;
+    color: var(--accent-light);
+  }
+  .btn-login {
+    background-color: var(--btn-bg);
+    color: var(--btn-color);
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: transform .2s;
+  }
+  .btn-login:hover {
+    transform: scale(1.03);
+  }
+  .link-light {
+    color: var(--accent-light);
+  }
+  .link-light:hover {
+    text-decoration: underline;
+  }
+  @media (max-width: 576px) {
+    .login-card {
+      padding: 2rem 1.5rem;
+    }
+  }
+  
