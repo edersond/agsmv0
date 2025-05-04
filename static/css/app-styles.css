@@ -1,0 +1,92 @@
+
+/* app-styles.css */
+:root {
+    --bg-color: #000;
+    --overlay: rgba(0, 0, 0, 0.6);
+    --font-heading: 'Montserrat', sans-serif;
+    --font-body: 'Open Sans', sans-serif;
+    --accent-light: #fff;
+    --btn-bg: beige;
+    --btn-color: green;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body { background: var(--bg-color); }
+    
+  .hero {
+    position: relative;
+    min-height: 100vh;           /* garante 100% da altura da viewport */
+    background: url('/media/img/ags-landing-backgorund.jpeg') no-repeat center center fixed;
+    background-size: contain;      /* ou “contain” se quiser ver a imagem inteira sem crop */
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--overlay);
+    z-index: 1;
+  }
+  .hero > div {
+    position: relative;
+    z-index: 2;
+  }
+  
+  .game-title {
+    font-family: var(--font-heading);
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--accent-light);
+  }
+  
+  .game-subtitle {
+    font-size: 1.25rem;
+    margin-top: 1rem;
+    color: var(--accent-light);
+  }
+  
+  .btn-enter {
+    display: inline-block;
+    width: 17rem;
+    height: 3.5rem;
+    background-color: var(--btn-bg);
+    color: var(--btn-color);
+    border: none;
+    font-size: 1.25rem;
+    font-weight: 600;
+    transition: transform 0.2s;
+  }
+  .btn-enter:hover {
+    transform: scale(1.05);
+  }
+  
+  .site-footer {
+    background: rgba(0, 0, 0, 0.8);
+    color: #ccc;
+  }
+  .site-footer a {
+    color: var(--accent-light);
+    text-decoration: none;
+  }
+  .site-footer a:hover {
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 768px) {
+    .game-title {
+      font-size: 2.5rem;
+    }
+    .btn-enter {
+      width: 80%;
+      max-width: 300px;
+    }
+    .hero {
+        background-attachment: scroll;
+      }
+  }
+  
