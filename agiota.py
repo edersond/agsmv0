@@ -3,6 +3,7 @@
 AGIOTA SIMULATOR V0
 """
 import os, re, asyncpg
+from datetime import datetime
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, RedirectResponse
@@ -11,11 +12,12 @@ from fastapi.templating import Jinja2Templates
 from libs import APP_GLOBALS
 from rich import print
 from contextlib import asynccontextmanager
-from libs.agdb import AGDB_DSN, create_pool, close_pool
+from libs.databases.agdb_postgres.pool import create_pool
 APP_GLOBALS = APP_GLOBALS()
+
     
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def _lifespan(app: FastAPI):
     # Code to run on startup
     print( "[bold black on white][AGIOTA SIMULATOR] - SETUP DE DIRETORIOS [/]\n" )
     for k in APP_GLOBALS.APP_DIRS.__dict__.keys():
@@ -26,21 +28,20 @@ async def lifespan(app: FastAPI):
         os.makedirs(os.path.join(APP_GLOBALS.APP_DIRS.STATIC, "js"), exist_ok=True)
         os.makedirs(os.path.join(APP_GLOBALS.APP_DIRS.MIDDLEWARE, "auth"), exist_ok=True)
     print( "[bold black on white][AGIOTA SIMULATOR] - SETUP DE DIRETORIOS - OK [/]" )
-    app.state.agdb_pool = await create_pool()
     print( "[bold black on white][AGIOTA SIMULATOR] - SETUP DE DATABASE[/]" )
+    app.state.GAME_START_DATE = datetime.strptime('2025-01-01 00:00:00 -0300', '%Y-%m-%d %H:%M:%S %z')
+    app.state.agdb_pool = await create_pool()
     yield
+
     # Code to run on shutdown
     print("[bold black on white][AGIOTA SIMULATOR] - EXECUTANDO SHUTDOWN[/]")
-    # Clean up resources here
-    await close_pool(app.state.agdb_pool)
+    # Clean up resources
     print("[bold black on white][AGIOTA SIMULATOR] - SHUTDOWN COMPLETO[/]")
 
-##
-async def get_agdb_pool():
-    yield app.state.agdb_pool
+
+app = FastAPI(lifespan=_lifespan)
 
 
-app = FastAPI(lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -49,12 +50,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.middleware("http")
 async def auth_middleware(request: Request, call_next):
     """
     Middleware to handle authentication and authorization
     """
-    public_routes = [r"^/$", r"^/static/.*", r"^/media/.*",  r"^/login$", r"^/test$",r"^/new-office$",r"^/enter-office$"]
+    public_routes = [r"^/$", r"^/static/.*", r"^/media/.*",  r"^/login$", r"^/test$",r"^/new-office$",r"^/enter-office$", r"^/my-office$"]
     if any(re.match(pattern, request.url.path) for pattern in public_routes):
         return await call_next(request) #mandou pro endpoint
 
@@ -77,8 +79,9 @@ app.mount("/media", StaticFiles(directory="media"), name="media")
 @app.get("/")
 async def index(request: Request):
    return  templates.TemplateResponse("home.html", {"request": request, "title": APP_GLOBALS.APP_NAME, "version": APP_GLOBALS.APP_VERSION, "description": APP_GLOBALS.APP_DESCRIPTION})
-from routes.login import login_routes
-app.include_router(login_routes, tags=["login"])
+
+from routes.login import login_router
+app.include_router(login_router, tags=["login"], include_in_schema=False)
 
 #
 

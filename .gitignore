@@ -178,3 +178,4 @@ agiota.db
 .shell
 agsm*
 gitp*
+.env

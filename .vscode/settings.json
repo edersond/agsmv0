@@ -1,0 +1,19 @@
+{
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#223032",
+        "titleBar.activeBackground": "#304346",
+        "titleBar.activeForeground": "#F8FAFA"
+    },
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5435,
+            "driver": "PostgreSQL",
+            "name": "agdb0",
+            "database": "postgres",
+            "username": "postgres",
+            "password": "p0stgr3s"
+        }
+    ]
+}
